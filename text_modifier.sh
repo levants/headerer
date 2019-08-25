@@ -1,2 +1,2 @@
 # shellcheck disable=SC2164
-python -m header_modifier
+python -m header_modifier --header {$1}

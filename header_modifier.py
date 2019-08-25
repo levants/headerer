@@ -81,7 +81,7 @@ def config():
     Returns:
         conf: command line configuration parameters
     """
-    parser = argparse.ArgumentParser('Text modifier for file name')
+    parser = argparse.ArgumentParser('File name generator from header')
     parser.add_argument('--header', '-n',
                         type=str,
                         reuired=True,
