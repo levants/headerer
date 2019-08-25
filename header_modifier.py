@@ -84,7 +84,7 @@ def config():
     parser = argparse.ArgumentParser('File name generator from header')
     parser.add_argument('--header', '-n',
                         type=str,
-                        reuired=True,
+                        required=True,
                         help='Text to generate file name')
     parser.add_argument('--pdf',
                         dest='pdf',
