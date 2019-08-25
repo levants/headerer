@@ -42,16 +42,17 @@ class FileNameGenerator(object):
 
         return itm
 
-    def generate_name(self, raw_text: str) -> str:
+    def generate_name(self, raw_texts: list) -> str:
         """
         Generates appropriated file name from raw text
         Args:
-            raw_text: text for file name generator
+            raw_texts: texts for file name generator
 
         Returns:
            generated file name
         """
-        return self.generate_item(raw_text.lower()) if raw_text and raw_text.strip() else ''
+        return '_'.join(
+            self.generate_item(raw_text.lower()) if raw_text and raw_text.strip() else '' for raw_text in raw_texts)
 
 
 class PDFNameGenerator(FileNameGenerator):
@@ -82,7 +83,8 @@ def config():
         conf: command line configuration parameters
     """
     parser = argparse.ArgumentParser('File name generator from header')
-    parser.add_argument('--header', '-n',
+    parser.add_argument('--header',
+                        nargs='+',
                         type=str,
                         required=True,
                         help='Text to generate file name')
