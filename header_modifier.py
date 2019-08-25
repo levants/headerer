@@ -8,11 +8,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import sys
+import argparse
 
 SEPARATOR = '_'
 
-SPCS = ['-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']']
+SPCS = [' ', '-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']']
 DLTS = ['\'', '-', u'–', '+']
 
 
@@ -42,25 +42,16 @@ class FileNameGenerator(object):
 
         return itm
 
-    def generate_name(self, raw_text):
+    def generate_name(self, raw_text: str) -> str:
         """
         Generates appropriated file name from raw text
         Args:
             raw_text: text for file name generator
 
         Returns:
-            fl_name: generated file name
+           generated file name
         """
-        fl_name = ''
-
-        length = len(raw_text) - 1
-        for idx, tx in enumerate(raw_text):
-            if idx > 0:
-                fl_name += self.generate_item(tx.lower())
-                if idx < length and not fl_name.endswith(SEPARATOR):
-                    fl_name += SEPARATOR
-
-        return fl_name
+        return self.generate_item(raw_text.lower()) if raw_text and raw_text.strip() else ''
 
 
 class PDFNameGenerator(FileNameGenerator):
@@ -69,7 +60,7 @@ class PDFNameGenerator(FileNameGenerator):
     def __init__(self, *args, **kwargs):
         super(PDFNameGenerator, self).__init__(*args, **kwargs)
 
-    def generate_pdf_name(self, raw_text):
+    def generate_pdf_name(self, raw_text: str) -> str:
         """
         Generates file name for PDF file type
         Args:
@@ -84,12 +75,32 @@ class PDFNameGenerator(FileNameGenerator):
         return pdf_name
 
 
+def config():
+    """
+    Configure for input text
+    Returns:
+        conf: command line configuration parameters
+    """
+    parser = argparse.ArgumentParser('Text modifier for file name')
+    parser.add_argument('--header', '-n',
+                        type=str,
+                        reuired=True,
+                        help='Text to generate file name')
+    parser.add_argument('--pdf',
+                        dest='pdf',
+                        action='store_true',
+                        help='Flag to generate file name with PDF extension')
+    conf = parser.parse_args()
+
+    return conf
+
+
 if __name__ == '__main__':
     """Modify text for file name"""
+    cf = config()
     gen = FileNameGenerator()
-    file_name = gen.generate_name(sys.argv)
+    file_name = gen.generate_name(cf.header)
     print(file_name)
-    if len(sys.argv) > 2:
-        gen = PDFNameGenerator()
-        file_name = gen.generate_pdf_name(sys.argv)
-        print(file_name)
+    if cf.pdf:
+        pdf_name = file_name + '.pdf'
+        print(pdf_name)
