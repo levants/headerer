@@ -34,9 +34,9 @@ class FileNameGenerator(object):
         """
         itm = ''
 
-        for ch in tx:
+        for idx, ch in enumerate(tx):
             if ch in SPCS:
-                itm += SEPARATOR
+                itm += SEPARATOR if idx < len(tx) - 1 else ''
             elif ch not in DLTS:
                 itm += ch
 
