@@ -9,6 +9,7 @@ from __future__ import division
 from __future__ import print_function
 
 import argparse
+import os
 
 SEPARATOR = '_'
 
@@ -102,6 +103,7 @@ if __name__ == '__main__':
     cf = config()
     gen = FileNameGenerator()
     file_name = gen.generate_name(cf.header)
+    os.system(f'echo {file_name}| pbcopy')
     print(file_name)
     if cf.pdf:
         pdf_name = file_name + '.pdf'
