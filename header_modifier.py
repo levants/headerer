@@ -11,6 +11,7 @@ from __future__ import print_function
 import argparse
 import os
 
+# Static parameters
 SEPARATOR = '_'
 
 SPCS = [' ', '-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']']
