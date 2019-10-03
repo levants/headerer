@@ -14,8 +14,10 @@ import os
 # Static parameters
 SEPARATOR = '_'
 
-SPCS = [' ', '-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']']
-DLTS = ['\'', '-', u'–', '+']
+SPCS = {' ', '-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']'}
+DLTS = {'\'', '-', '–', '+'}
+ACCP = {f(chr(x)) for x in range(ord('a'), ord('z') + 1) for f in [lambda x: x, lambda x: x.upper()]}.union(
+    {str(x) for x in range(0, 10)})
 
 
 class FileNameGenerator(object):
@@ -25,7 +27,23 @@ class FileNameGenerator(object):
         super(FileNameGenerator, self).__init__(*args, **kwargs)
 
     @staticmethod
-    def generate_item(tx):
+    def _iterate_text(tx: str) -> str:
+        sep_ch = False
+        for idx, ch in enumerate(tx):
+            if ch == ' ':
+                next_ch = SEPARATOR if idx < len(tx) - 1 and sep_ch else ''
+                sep_ch = False
+            elif ch in ACCP:
+                next_ch = ch.lower()
+                sep_ch = True
+            else:
+                next_ch = ''
+                sep_ch = False
+
+            yield next_ch
+
+    @staticmethod
+    def generate_item(tx: str) -> str:
         """
         Generates item from string
         Args:
@@ -34,17 +52,9 @@ class FileNameGenerator(object):
         Returns:
             itm: next item from existing text
         """
-        itm = ''
+        return ''.join(ch for ch in FileNameGenerator._iterate_text(tx))
 
-        for idx, ch in enumerate(tx):
-            if ch in SPCS:
-                itm += SEPARATOR if idx < len(tx) - 1 else ''
-            elif ch not in DLTS:
-                itm += ch
-
-        return itm
-
-    def generate_name(self, raw_texts: list) -> str:
+    def generate_name(self, *raw_texts: str) -> str:
         """
         Generates appropriated file name from raw text
         Args:
@@ -53,8 +63,10 @@ class FileNameGenerator(object):
         Returns:
            generated file name
         """
-        return '_'.join(
-            self.generate_item(raw_text.lower()) if raw_text and raw_text.strip() else '' for raw_text in raw_texts)
+        return ''.join(self.generate_item(' '.join(raw_texts)))
+
+    def __call__(self, *args, **kwargs):
+        return self.generate_name(*args, **kwargs)
 
 
 class PDFNameGenerator(FileNameGenerator):
@@ -103,7 +115,7 @@ if __name__ == '__main__':
     """Modify text for file name"""
     cf = config()
     gen = FileNameGenerator()
-    file_name = gen.generate_name(cf.header)
+    file_name = gen(*cf.header)
     os.system(f'echo {file_name}| pbcopy')
     print(file_name)
     if cf.pdf:
