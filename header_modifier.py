@@ -14,7 +14,7 @@ import os
 # Static parameters
 SEPARATOR = '_'
 
-SPCS = {' ', '-', '.', ',', ':', ';', '!', '?', '"', '\\', '/', '(', ')', '{', '}', '[', ']'}
+SPCS = {' ', '-', '–', '+', '.', ',', ':', ';', '!', '?', '"', '\'', '\\', '/', '(', ')', '{', '}', '[', ']'}
 DLTS = {'\'', '-', '–', '+'}
 ACCP = {f(chr(x)) for x in range(ord('a'), ord('z') + 1) for f in [lambda x: x, lambda x: x.upper()]}.union(
     {str(x) for x in range(0, 10)})
@@ -30,12 +30,12 @@ class FileNameGenerator(object):
     def _iterate_text(tx: str) -> str:
         sep_ch = False
         for idx, ch in enumerate(tx):
-            if ch == ' ':
-                next_ch = SEPARATOR if idx < len(tx) - 1 and sep_ch else ''
-                sep_ch = False
-            elif ch in ACCP:
+            if ch in ACCP:
                 next_ch = ch.lower()
                 sep_ch = True
+            elif idx < len(tx) - 1 and sep_ch:
+                next_ch = SEPARATOR
+                sep_ch = False
             else:
                 next_ch = ''
                 sep_ch = False
