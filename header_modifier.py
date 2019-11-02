@@ -14,7 +14,8 @@ import os
 # Static parameters
 SEPARATOR = '_'
 
-SPCS = {' ', '-', '–', '+', '.', ',', ':', ';', '!', '?', '"', '\'', '\\', '/', '(', ')', '{', '}', '[', ']'}
+SPCS = {' ', '-', '–', '+', '.', ',', ':', ';', '!', '?', '"', '\'', '\\', '/', '(', ')', '{', '}', '[', ']', '\\n',
+        '\\t'}
 DLTS = {'\'', '-', '–', '+'}
 ACCP = {f(chr(x)) for x in range(ord('a'), ord('z') + 1) for f in [lambda x: x, lambda x: x.upper()]}.union(
     {str(x) for x in range(0, 10)})
@@ -96,7 +97,7 @@ def config():
     Returns:
         conf: command line configuration parameters
     """
-    parser = argparse.ArgumentParser('File name generator from header')
+    parser = argparse.ArgumentParser('File name generator from header', formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('--header',
                         nargs='+',
                         type=str,
