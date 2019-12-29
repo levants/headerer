@@ -91,12 +91,9 @@ class PDFNameGenerator(FileNameGenerator):
             raw_text: input text
 
         Returns:
-            pdf_name: generated PDF file name
+            generated PDF file name
         """
-        fl_name = FileNameGenerator.generate_name(self, raw_text)
-        pdf_name = fl_name + '.pdf'
-
-        return pdf_name
+        return f'{FileNameGenerator.generate_name(self, raw_text)}.pdf'
 
 
 def config():
@@ -124,9 +121,9 @@ if __name__ == '__main__':
     """Modify text for file name"""
     cf = config()
     gen = FileNameGenerator()
-    file_name = gen(*cf.header)
+    file_name = gen(*cf.header).strip()
     os.system(f'echo {file_name}| pbcopy')
     print(file_name)
     if cf.pdf:
-        pdf_name = file_name + '.pdf'
+        pdf_name = f'{file_name}.pdf'
         print(pdf_name)
