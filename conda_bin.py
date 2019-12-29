@@ -15,7 +15,7 @@ from pathlib import Path
 
 def config():
     """
-    Configure for input text
+    Configure for conda environment
     Returns:
         conf: command line configuration parameters
     """

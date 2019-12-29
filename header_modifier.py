@@ -29,6 +29,14 @@ class FileNameGenerator(object):
 
     @staticmethod
     def _iterate_text(tx: str) -> str:
+        """
+        Iterate over text and replace specian characters
+        Args:
+            tx: text for refinement
+
+        Returns:
+            next_ch: generator for next character
+        """
         sep_ch = False
         for idx, ch in enumerate(tx):
             if ch in ACCP:
@@ -53,7 +61,7 @@ class FileNameGenerator(object):
         Returns:
             itm: next item from existing text
         """
-        return ''.join(ch for ch in FileNameGenerator._iterate_text(tx))
+        return (''.join(ch for ch in FileNameGenerator._iterate_text(tx))).strip()
 
     def generate_name(self, *raw_texts: str) -> str:
         """
@@ -64,7 +72,7 @@ class FileNameGenerator(object):
         Returns:
            generated file name
         """
-        return ''.join(self.generate_item(' '.join(raw_texts)))
+        return (''.join(self.generate_item(' '.join(raw_texts)))).strip()
 
     def __call__(self, *args, **kwargs):
         return self.generate_name(*args, **kwargs)
