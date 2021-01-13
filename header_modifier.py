@@ -4,9 +4,7 @@ Created on Jul 11, 2016
 Modifies passed text for file name
 @author: Levan Tsinadze
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import argparse
 import os
@@ -14,11 +12,12 @@ import os
 # Static parameters
 SEPARATOR = '_'
 
-SPCS = {' ', '-', '–', '+', '.', ',', ':', ';', '!', '?', '"', '\'', '\\', '/', '(', ')', '{', '}', '[', ']', '\\n',
-        '\\t'}
+SPCS = {' ', '-', '–', '+', '.', ',', ':', ';', '!', '?', '"', '\'', '\\', 
+        '/', '(', ')', '{', '}', '[', ']', '\\n', '\\t'}
 DLTS = {'\'', '-', '–', '+'}
-ACCP = {f(chr(x)) for x in range(ord('a'), ord('z') + 1) for f in [lambda x: x, lambda x: x.upper()]}.union(
-    {str(x) for x in range(0, 10)})
+ACCP = {f(chr(x)) for x in range(ord('a'), ord('z') + 1) for 
+        f in [lambda x: x, lambda x: x.upper()]}.union({str(x) for 
+                                                        x in range(0, 10)})
 
 
 class FileNameGenerator(object):
@@ -61,7 +60,8 @@ class FileNameGenerator(object):
         Returns:
             itm: next item from existing text
         """
-        return (''.join(ch for ch in FileNameGenerator._iterate_text(tx))).strip()
+        return (''.join(ch for 
+                        ch in FileNameGenerator._iterate_text(tx))).strip()
 
     def generate_name(self, *raw_texts: str) -> str:
         """
@@ -102,7 +102,9 @@ def config():
     Returns:
         conf: command line configuration parameters
     """
-    parser = argparse.ArgumentParser('File name generator from header', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser('File name generator from header', 
+                                     formatter_class=
+                                     argparse.RawTextHelpFormatter)
     parser.add_argument('--header',
                         nargs='+',
                         type=str,
@@ -118,7 +120,6 @@ def config():
 
 
 if __name__ == '__main__':
-    """Modify text for file name"""
     cf = config()
     gen = FileNameGenerator()
     file_name = gen(*cf.header).strip()

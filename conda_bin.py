@@ -4,16 +4,14 @@ Created on Sep 04, 2019
 Generates path to conda environment Python executable
 @author: Levan Tsinadze
 """
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function
 
 import argparse
 import os
 from pathlib import Path
 
 
-def config():
+def config() -> argparse.Namespace:
     """
     Configure for conda environment
     Returns:
@@ -51,7 +49,6 @@ def find_bin(env_name: str, conda_root: Path = Path('/anaconda3')) -> str:
 
 
 if __name__ == '__main__':
-    """Modify text for file name"""
     cf = config()
     conda_path = Path(*cf.conda)
     python_path = find_bin(cf.env, conda_root=conda_path)
